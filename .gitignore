@@ -1,16 +1,20 @@
+cat > .gitignore <<'EOF'
 # Terraform
 .terraform/
-**/.terraform/*
 *.tfstate
 *.tfstate.*
-*.tfvars
-*.tfplan
+terraform.tfstate
+terraform-state-backup.json
 terraform.exe
+*.tfplan
+*.tfvars
 
-# Ansible
-inventory.ini
+# Ansible : inventaire local
+**/inventory.ini
+**/vault-password*
 
 # Secrets
 .env
 *.pem
 *.key
+EOF
