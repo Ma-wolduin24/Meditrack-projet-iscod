@@ -1,0 +1,21 @@
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfplan
+crash.log
+override.tf
+override.tf.json
+
+# AWS et secrets
+.aws/
+credentials
+.env
+*.pem
+*.key
+vault-password*
+
+# Ansible
+inventory.ini
