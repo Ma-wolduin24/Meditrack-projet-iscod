@@ -1,14 +1,14 @@
-
-# Terraform 
+# Terraform
 .terraform/
 **/.terraform/*
 *.tfstate
 *.tfstate.*
 *.tfvars
 *.tfplan
-
-# Exécutables
 terraform.exe
+
+# Ansible
+inventory.ini
 
 # Secrets
 .env
