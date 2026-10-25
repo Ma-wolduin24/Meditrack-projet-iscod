@@ -1,0 +1,72 @@
+---
+- name: Installer et démarrer Apache sur EC2
+  hosts: webservers
+  become: true
+
+  tasks:
+    - name: Mettre à jour le cache APT
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Installer Apache
+      ansible.builtin.apt:
+        name: apache2
+        state: present
+
+    - name: Démarrer Apache et activer son démarrage automatique
+      ansible.builtin.service:
+        name: apache2
+        state: started
+        enabled: true
+
+    - name: Vérifier que le serveur HTTP répond localement
+      ansible.builtin.uri:
+        url: http://localhost/
+        status_code: 200
+
+    - name: page de test
+      ansible.builtin.copy:
+        src: /mnt/c/Users/woldu/OneDrive/Documents/alternance/COURS/meditrack-cloud/ansible/site/
+        dest: /var/www/html/
+        owner: www-data
+        group: www-data
+        mode: preserve
+        directory_mode: '0755'
+    
+    - name: Créer un utilisateur d'administration MediTrack
+      ansible.builtin.user:
+          name: meditrack-admin
+          comment: "Administration MediTrack"
+          shell: /bin/bash
+          create_home: true
+          state: present
+
+    - name: Vérifier les permissions du répertoire web
+      ansible.builtin.file:
+          path: /var/www/html
+          state: directory
+          owner: root
+          group: www-data
+          mode: "0755"
+
+    - name: Autoriser les connexions sortantes
+      community.general.ufw:
+          direction: outgoing
+          policy: allow
+
+    - name: Autoriser HTTP
+      community.general.ufw:
+          rule: allow
+          port: "80"
+          proto: tcp
+
+    - name: Autoriser HTTPS
+      community.general.ufw:
+          rule: allow
+          port: "443"
+          proto: tcp
+
+    - name: Activer UFW
+      community.general.ufw:
+          state: enabled
